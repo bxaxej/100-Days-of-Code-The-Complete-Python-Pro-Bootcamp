@@ -1,7 +1,6 @@
 import os
 
-names = []
-bids = []
+bids_dic = {}
 
 
 def logo():
@@ -27,15 +26,17 @@ def clear_console():
         os.system('clear')
 
 
-def winner():
-    winner_bid = max(bids)
+def winner(bidding_record):
+    highest_bid = 0
+    winner = ""
 
-    winners = [names[i] for i in range(len(bids)) if bids[i] == winner_bid]
+    for bidder in bidding_record:
+        bid_amount = bidding_record[bidder]
+        if bid_amount > highest_bid:
+            highest_bid = bid_amount
+            winner = bidder
 
-    if len(winners) > 1:
-        print(f"It's a tie! The winners are {', '.join(winners)} with a bid of ${winner_bid}")
-    else:
-        print(f"The winner is {winners[0]} with a bid of ${winner_bid}")
+    print(f"The winner is {winner} with a bid of ${highest_bid}")
 
 logo()
 while True:
@@ -43,7 +44,6 @@ while True:
     while True:
         name = input("Enter your name: ").lower().strip()
         if name.isalpha():
-            names.append(name)
             break
         else:
             print("Please enter a valid name")
@@ -55,11 +55,11 @@ while True:
          if bid < 0:
             raise ValueError
          else:
-            bids.append(bid)
             break
-
         except ValueError:
             print("Please enter a number")
+
+    bids_dic[name] = bid
 
     while True:
         bidders = input("Are there any other bidders? Type 'yes' or 'no': ").lower().strip()
@@ -77,4 +77,4 @@ while True:
     else:
         continue
 
-winner()
+winner(bids_dic)
